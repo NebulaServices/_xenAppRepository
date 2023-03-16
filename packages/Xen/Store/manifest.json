@@ -1,6 +1,6 @@
 {
   "name": "Apps",
-  "assets": ["manifest.json", "app.js", "index.html", "build/bundle.js", "script.js", "style.css", "icon.png", "global.css", "applist.json", "ibmplex.woff", "banner.png"],
+  "assets": ["manifest.json", "app.js", "static/index.html", "static/script.js", "static/build.css", "icon.png"],
   "entry": "app.js",
   "type": "app",
   "repository": "none",
