@@ -1,0 +1,3 @@
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/.bin/mime","time":"2023-03-16T14:13:34Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/.bin/uuid","time":"2023-03-16T14:13:34Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/uuidv4/node_modules/.bin/uuid","time":"2023-03-16T14:13:34Z"}

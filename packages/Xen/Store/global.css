@@ -1,0 +1,244 @@
+html,
+body {
+	margin: 0;
+	border: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	background: transparent;
+}
+
+html {
+	background: url("https://raw.githubusercontent.com/notAperson535/Win11-HTML/main/img/backgrounddark.jpg");
+}
+
+body {
+	background: transparent;
+	backdrop-filter: blur(1200px);
+}
+
+@font-face {
+	font-family: 'ibm-plex';
+	src: url('ibmplex.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+* {
+	font-family: 'ibm-plex';
+	color: white;
+}
+
+#sidebar {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100px;
+	gap: 0.7rem;
+	padding: 0.7em;
+	box-sizing: border-box;
+	align-items: center;
+}
+
+#sidebar>button {
+	background: none;
+	border: none;
+	width: 100%;
+	padding: 1.5em;
+	border-radius: 0.5rem;
+}
+
+#sidebar>button:hover {
+	background: rgba(45, 45, 45, 0.5);
+}
+
+#sidebar>button.active {
+	background: rgba(45, 45, 45, 0.5);
+}
+
+.storepage {
+	position: absolute;
+	display: none;
+	top: 0px;
+	left: 100px;
+	background: rgba(39, 39, 39, 0.8);
+	width: calc(100% - 100px);
+	height: 100%;
+	border-top-left-radius: 0.5rem;
+	overflow: auto;
+}
+
+.banner {
+	position: relative;
+	width: -webkit-fill-available;
+	margin: 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 5px 5px 15px -9px #000000;
+}
+
+.appentries {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(32%, 1fr));
+	gap: 1rem;
+	margin: 0 1rem;
+	position: relative;
+}
+
+.appentry {
+	position: relative;
+	background: rgba(50, 50, 50, 0.5);
+	border-radius: 0.5rem;
+	display: flex;
+	align-items: center;
+	height: 5rem;
+	padding: 1em;
+	gap: 1rem;
+	transition: all ease-in-out .2s;
+	width: auto;
+	border: 0.1125rem solid rgba(26, 30, 33, 0.5);
+	text-align: start;
+	height: 7rem;
+}
+
+.appentry:hover {
+	background: rgba(46, 46, 46, 0.5);
+	transform: translateY(-0.2rem);
+}
+
+.appentry:active {
+	background: rgba(44, 44, 44, 0.5);
+	transform: translateY(0px);
+}
+
+.appentry>img {
+	height: 100%;
+	border-radius: 0.25rem;
+}
+
+.appentry>.textinfo {
+	height: 100%
+}
+
+.appentry>.textinfo>.appname {
+	margin: 0;
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+
+.appentry>.textinfo>.apptype {
+	color: #aaacad;
+	margin: 0;
+	margin-top: 0.25rem;
+	font-size: 0.75rem;
+}
+
+#downloads>h2 {
+	margin: 1rem;
+}
+
+#downloads>.appentries {
+	display: grid;
+	gap: 1rem;
+	margin: 0 1rem;
+	position: relative;
+}
+
+#downloads>.appentries>.appentry:hover {
+	transform: translateY(0px);
+}
+
+.productpage {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	height: 100%;
+	gap: 1rem;
+}
+
+.productpage>.leftside,
+.productpage>.rightside>div {
+	border-radius: 0.5rem;
+	background: rgba(50, 50, 50, 0.5);
+	border: 0.1125rem solid rgba(26, 30, 33, 0.5);
+	overflow: auto;
+}
+
+.productpage>.leftside {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 2.5rem;
+}
+
+.productpage>.leftside>img {
+	width: 33%;
+	border-radius: 0.5rem;
+}
+
+.productpage>.leftside>button,
+#downloads>.appentries>.appentry>button {
+	color: black;
+	border: none;
+	border-radius: 0.5rem;
+	padding: 0.5rem 0;
+	width: 40%;
+}
+
+.productpage>.leftside>button {
+	background: #4cc2ff;
+}
+
+.productpage>.leftside>button:hover {
+	background: #48b3ea;
+}
+
+#downloads>.appentries>.appentry>button {
+	position: absolute;
+	right: 1rem;
+	color: white;
+	background: #3e3e3e;
+	width: fit-content;
+	padding: 0.5rem 2rem;
+}
+
+#downloads>.appentries>.appentry>button:hover {
+	background: #494949;
+}
+
+.productpage>.leftside>p {
+	color: #aaacad;
+	margin: 0;
+	margin-top: 0.25rem;
+	font-size: 0.75rem;
+}
+
+.productpage>.rightside {
+	display: grid;
+	gap: 1rem;
+}
+
+.productpage>.rightside>div>h4 {
+	margin: 0;
+	padding: 1rem;
+	box-sizing: border-box;
+	width: 100%;
+	border-bottom: .1125rem solid #51575a;
+	height: 56px;
+}
+
+.productpage>.rightside>.screenshots>.images {
+	display: flex;
+	align-items: center;
+	height: calc(100% - 58px);
+	position: relative;
+	overflow: auto;
+	gap: 1rem;
+}
+
+.productpage>.rightside>.screenshots>.images>img {
+	height: 20rem;
+}
+
+.productpage>.rightside>.description>p {
+	margin: 1rem;
+}

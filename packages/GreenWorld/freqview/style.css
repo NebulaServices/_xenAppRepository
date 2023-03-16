@@ -1,0 +1,127 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+margin: 4px;
+    width: 100%;
+    height: 99vh;
+    background: #0e0e0e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    overflow: hidden;
+    transition: background-image 0.5s ease-out;
+}
+canvas {
+     background: #00000000;
+    border: transparent;
+}
+::-webkit-scrollbar {
+  background-color: white;
+}
+
+/* Set the color of the thumb */
+::-webkit-scrollbar-thumb {
+  background-color: gray;
+}
+
+/* Make the scrollbar always visible */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: white;
+}
+
+/* Set the width and height of the thumb */
+::-webkit-scrollbar-thumb {
+  height: 50px;
+  width: 10px;
+}
+#canvas-container {
+      height: 524px;
+  overflow: auto;
+  overflow-y: scroll;
+}
+
+button {
+      background: black;
+    border: solid transparent;
+    color: white;
+}
+
+.choi {
+    display: flex;
+    color: white;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    font-family: sans-serif;
+}
+
+
+
+.file-upload-wrapper {
+ position: relative;
+    width: 363px;
+    height: 31px;
+  font-family: sans-serif;
+}
+.file-upload-wrapper:after {
+  content: attr(data-text);
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+    padding: 10px 15px;
+    display: block;
+    width: calc(100% - 40px);
+    pointer-events: none;
+    z-index: 20;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    border-radius: 5px 10px 10px 5px;
+    font-weight: 300;
+}
+.file-upload-wrapper:before {
+ content: "Upload";
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    height: 60px;
+    background: #ffffff;
+    color: #000;
+    font-weight: 700;
+    z-index: 25;
+    font-size: 16px;
+    line-height: 60px;
+    padding: 0 15px;
+    text-transform: uppercase;
+    pointer-events: none;
+    border-radius: 0 5px 5px 0;
+}
+.file-upload-wrapper:hover:before {
+  background: #d6d6d6;
+}
+.file-upload-wrapper input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  display: block;
+  cursor: pointer;
+  width: 100%;
+}

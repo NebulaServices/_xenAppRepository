@@ -1,0 +1,10 @@
+{
+  "name": "Apps",
+  "assets": ["manifest.json", "app.js", "index.html", "build/bundle.js", "script.js", "style.css", "icon.png", "global.css", "applist.json", "ibmplex.woff", "banner.png"],
+  "entry": "app.js",
+  "type": "app",
+  "repository": "none",
+  "permissions": ["apps"],
+  "icon": "./icon.png",
+  "version": "0.4"
+}

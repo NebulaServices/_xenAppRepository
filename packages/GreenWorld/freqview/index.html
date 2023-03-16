@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Xen</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+   <div class="file-upload-wrapper" data-text="Select your file!">
+      <input id='audio-file-input' type="file" class="file-upload-field" value="">
+</div>
+<div id="canvas-container">
+  <canvas id="sound-wave"></canvas>
+</div>
+  <button id="wave-type-button">Change Waveform Type</button>
+  <div class='choi'> 
+<input type="radio" value="SineWave" id='siw'>  
+     <label for="siw">Sinewave</label>
+
+
+    
+ <input type="radio" value="SquareWave" id='sqa'> 
+     <label for="sqa">Squarewave</label>
+
+
+    
+<input type='radio' value="Soundwave" id='swa'> 
+    <label for="swa">Soundwave</label>
+    
+    <input type='radio' value="NoiseWave" id='now'> 
+    <label for="now">Noisewave</label>
+    
+  <input type='radio' value="Pulsewave" id='pwa'> 
+    <label for="pwa">Pulsewave</label>
+
+     <input type='radio' value="trw" id='trw'> 
+    <label for="trw"> Trianglewave </label>
+    
+  <input type='radio' value="stmap" id='stmap'> 
+    <label for="stmap">View Stereo Map</label>
+    
+  <script>
+    const audioContext = new AudioContext();
+const analyserNode = audioContext.createAnalyser();
+analyserNode.fftSize = 2048;
+analyserNode.smoothingTimeConstant = 0.8;
+
+// Get the canvas element and context
+const canvas = document.getElementById('sound-wave');
+const ctx = canvas.getContext('2d');
+// Define the minimum and maximum zoom levels
+const minZoomLevel = 1;
+const maxZoomLevel = 64;
+
+// Set the initial zoom level
+let zoomLevel = 1;
+
+// Add a mousewheel event listener to the canvas element to zoom in and out of the frequency spectrum
+canvas.addEventListener('wheel', function(event) {
+  event.preventDefault()
+  // Calculate the new zoom level based on the mouse wheel delta
+  zoomLevel -= Math.sign(event.deltaY);
+
+  // Constrain the zoom level to the defined minimum and maximum values
+  zoomLevel = Math.min(maxZoomLevel, Math.max(minZoomLevel, zoomLevel));
+});
+
+
+
+
+
+// Set the canvas dimensions
+const canvasWidth = canvas.offsetWidth * 3.5;
+const canvasHeight = canvas.offsetHeight * 3.5;
+canvas.width = canvasWidth;
+canvas.height = canvasHeight;
+
+// Create a flag to track the animation loop state
+let isAnimating = true;
+
+// Create a variable to track the current waveform type
+let waveformType = 'sineWave';
+
+// Create the animation loop
+function draw() {
+  requestAnimationFrame(draw);
+
+  // Get the frequency data from the AnalyserNode
+const numBins = analyserNode.frequencyBinCount / zoomLevel;
+
+// Get the frequency data from the AnalyserNode
+const frequencyData = new Uint8Array(numBins);
+analyserNode.getByteFrequencyData(frequencyData);
+const leftChannelData = new Uint8Array(numBins);
+const rightChannelData = new Uint8Array(numBins);
+analyserNode.getByteFrequencyData(leftChannelData, 0);
+analyserNode.getByteFrequencyData(rightChannelData, 1);
+// Draw the frequency spectrum
+for (let i = 0; i < numBins; i++) {
+  const x = (i / numBins) * canvasWidth;
+  const y = (frequencyData[i] / 255) * canvasHeight;
+  ctx.fillRect(x, canvasHeight - y, canvasWidth / numBins, y);
+}
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  // Draw the waveform based on the current waveform type
+  if (waveformType === 'soundWave') {
+    drawSoundWave(frequencyData);
+  } else if (waveformType === 'sineWave') {
+    drawSineWave(frequencyData);
+  } else if (waveformType === 'squareWave'){
+    drawSquareWave(frequencyData)
+  } else if (waveformType === 'pulseWave'){
+    drawPulseWave(frequencyData)
+  } else if (waveformType === 'noiseWave'){
+    drawNoiseWave(frequencyData)
+  } else if (waveformType ==='stereoMap'){
+    drawStereoMap(leftChannelData, rightChannelData);
+  } else if (waveformType === 'triangleWave'){
+    drawTriangleWave(frequencyData)
+  }
+
+
+
+  // Pause the animation loop if the flag is set to false
+  if (!isAnimating) {
+    return;
+  }
+}
+// Draw the sound wave
+function drawSoundWave(frequencyData, transition = 0) {
+  const steps = 50; // number of steps for the transition
+  let currentStep = 0; // current step of the transition
+
+  // Define the start and end positions of the wave
+  const startPos = [{ x: 0, y: canvasHeight / 2 }];
+  const endPos = [];
+  for (let i = 0; i < frequencyData.length; i++) {
+    const x = (i / frequencyData.length) * canvasWidth;
+    const y = (frequencyData[i] / 255) * canvasHeight;
+    endPos.push({ x, y });
+  }
+  endPos.push({ x: canvasWidth, y: canvasHeight / 2 });
+
+  if (transition > 0) {
+    const interval = setInterval(() => {
+      if (currentStep >= steps) {
+        clearInterval(interval);
+      } else {
+        // Calculate the position of the wave at the current step
+        const currentPos = [];
+        for (let i = 0; i < startPos.length; i++) {
+          const x = startPos[i].x + (endPos[i].x - startPos[i].x) * (currentStep / steps);
+          const y = startPos[i].y + (endPos[i].y - startPos[i].y) * (currentStep / steps);
+          currentPos.push({ x, y });
+        }
+
+        // Draw the wave at the current position
+        drawWave(currentPos);
+
+        currentStep++;
+      }
+    }, transition / steps);
+  } else {
+    drawWave(endPos);
+  }
+
+  function drawWave(positions) {
+    ctx.beginPath();
+    ctx.moveTo(positions[0].x, positions[0].y);
+
+    for (let i = 1; i < positions.length; i++) {
+      const x = positions[i].x;
+      const y = positions[i].y;
+      ctx.lineTo(x, y);
+    }
+
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+
+// Draw the sine wave
+function drawSineWave(frequencyData) {
+  ctx.beginPath();
+  ctx.moveTo(0, canvasHeight / 2);
+
+  for (let i = 0; i < frequencyData.length; i++) {
+    const x = (i / frequencyData.length) * canvasWidth;
+    const y = (canvasHeight / 2) + Math.sin(i) * (canvasHeight / 4) * (frequencyData[i] / 255);
+    ctx.lineTo(x, y);
+  }
+
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawSquareWave(frequencyData) {
+  ctx.beginPath();
+  ctx.moveTo(0, canvasHeight / 2);
+
+  for (let i = 0; i < frequencyData.length; i++) {
+    const x = (i / frequencyData.length) * canvasWidth;
+    const y = (canvasHeight / 2) + (Math.floor(i/10) % 2 === 0 ? 1 : -1) * (canvasHeight / 4) * (frequencyData[i] / 255);
+    ctx.lineTo(x, y);
+  }
+
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawTriangleWave(frequencyData) {
+  ctx.beginPath();
+  ctx.moveTo(0, canvasHeight / 2);
+
+  for (let i = 0; i < frequencyData.length; i++) {
+    const x = (i / frequencyData.length) * canvasWidth;
+    const y = (canvasHeight / 2) + (2 / Math.PI) * Math.asin(Math.sin(2 * Math.PI * i / frequencyData.length)) * (canvasHeight / 4) * (frequencyData[i] / 255);
+    ctx.lineTo(x, y);
+  }
+
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawNoiseWave(frequencyData) {
+  ctx.beginPath();
+  ctx.moveTo(0, canvasHeight / 2);
+
+  for (let i = 0; i < frequencyData.length; i++) {
+    const x = (i / frequencyData.length) * canvasWidth;
+    const y = (canvasHeight / 2) + (2 * (Math.random() - 0.5)) * (canvasHeight / 4) * (frequencyData[i] / 255);
+    ctx.lineTo(x, y);
+  }
+
+  ctx.strokeStyle = '#fc0329';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawPulseWave(frequencyData) {
+  ctx.beginPath();
+  ctx.moveTo(0, canvasHeight / 2);
+
+  for (let i = 0; i < frequencyData.length; i++) {
+    const x = (i / frequencyData.length) * canvasWidth;
+    const width = (Math.sin(2 * Math.PI * i / frequencyData.length) + 1) / 2;
+    const y = (canvasHeight / 2) + (2 * (Math.random() - 0.5)) * (canvasHeight / 4) * (frequencyData[i] / 255) * width;
+    ctx.lineTo(x, y);
+  }
+
+  ctx.strokeStyle = '#fc0324';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawStereoMap(leftChannelData, rightChannelData) {
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  
+  // Draw left channel wave
+  ctx.beginPath();
+  ctx.moveTo(0, canvasHeight * 0.25);
+  for (let i = 0; i < leftChannelData.length; i++) {
+    const x = (i / leftChannelData.length) * canvasWidth;
+    const y = (canvasHeight * 0.25) + (leftChannelData[i] / 255) * (canvasHeight * 0.25);
+    ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#f00';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Draw right channel wave
+  ctx.beginPath();
+  ctx.moveTo(0, canvasHeight * 0.75);
+  for (let i = 0; i < rightChannelData.length; i++) {
+    const x = (i / rightChannelData.length) * canvasWidth;
+    const y = (canvasHeight * 0.75) + (rightChannelData[i] / 255) * (canvasHeight * 0.25);
+    ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#0f0';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+const swa = document.getElementById('swa');
+swa.addEventListener('click', function() {
+
+    waveformType = "soundWave";
+  
+  
+});
+
+
+const siw = document.getElementById('siw');
+siw.addEventListener('click', function() {
+
+    waveformType = "sineWave";
+
+});
+
+const sqa = document.getElementById('sqa');
+sqa.addEventListener('click', function() {
+
+    waveformType = "squareWave";
+
+});
+
+const now = document.getElementById('now');
+now.addEventListener('click', function() {
+
+    waveformType = "noiseWave";
+
+});
+
+const pwa = document.getElementById('pwa');
+pwa.addEventListener('click', function() {
+
+    waveformType = "pulseWave";
+
+});
+
+const stmap = document.getElementById('stmap');
+stmap.addEventListener('click', function() {
+
+    waveformType = "stereoMap";
+
+});
+const trw = document.getElementById('trw');
+trw.addEventListener('click', function() {
+
+    waveformType = "triangleWave";
+
+});
+
+
+// Handle file upload
+const audioFileInput = document.getElementById('audio-file-input');
+audioFileInput.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  // Create an instance of the FileReader API to read the file data
+  const reader = new FileReader();
+
+  // When the file is loaded, create an audio buffer and connect it to the AnalyserNode
+  reader.onload = function(e) {
+    const fileData = e.target.result;
+
+    audioContext.decodeAudioData(fileData, function(buffer) {
+      const audioBufferSourceNode = audioContext.createBufferSource();
+      audioBufferSourceNode.buffer = buffer;
+      audioBufferSourceNode.connect(analyserNode);
+      analyserNode.connect(audioContext.destination);
+
+      // Start playing the audio file
+      audioBufferSourceNode.start();
+
+      // Start the animation loop
+      draw(audioBufferSourceNode);
+    });
+  };
+
+  reader.readAsArrayBuffer(file);
+});
+
+// Add a click event listener to the canvas element to pause and resume the animation loop
+canvas.addEventListener('click', function() {
+  isAnimating = !isAnimating;
+
+  // Pause the audio if the animation loop is paused
+  if (!isAnimating) {
+    audioContext.suspend();
+  } else {
+    audioContext.resume();
+  }
+});
+
+  </script> 
+</div>
+</body>
+
+</html>

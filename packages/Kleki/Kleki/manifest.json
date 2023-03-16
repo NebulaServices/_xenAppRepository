@@ -1,0 +1,10 @@
+{
+  "name": "Kleki",
+  "assets": ["manifest.json", "main.js", "app.js","index.html", "logo.png"],
+  "entry": "main.js",
+  "type": "app",
+  "repository": "none",
+  "permissions": ["apps"],
+  "icon": "./logo.png",
+  "version": "1.0"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.0.6",
+    "device-uuid": "^1.0.4",
+    "fs": "^0.0.1-security",
+    "mime": "^3.0.0",
+    "node-fetch": "^3.2.6",
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "TikTok",
+  "assets": ["manifest.json", "app.js", "icon.png"],
+  "entry": "app.js",
+  "type": "app",
+  "repository": "none",
+  "permissions": ["apps"],
+  "icon": "./icon.png",
+  "version": "1.0"
+}

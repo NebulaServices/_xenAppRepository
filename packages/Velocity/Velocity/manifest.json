@@ -1,0 +1,10 @@
+{
+  "name": "Velocity",
+  "assets": ["manifest.json", "app.js", "icon.png"],
+  "entry": "app.js",
+  "type": "app",
+  "repository": "https://github.com/CohenErickson/Velocity",
+  "permissions": [],
+  "icon": "./icon.png",
+  "version": "1.3"
+}
